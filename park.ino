@@ -7,12 +7,33 @@
 #define buzzerPin 49
 MFRC522 mfrc522(SDA_DIO, RESET_DIO);
 
+#define X_STEP_PIN         54
+#define X_DIR_PIN          55
+#define X_ENABLE_PIN       38
 #define X_MIN_PIN           3
-#define X_MAX_PIN           2
+#define X_MAX_PIN          -1 //PIN 2 is used
+
+#define Y_STEP_PIN         60
+#define Y_DIR_PIN          61
+#define Y_ENABLE_PIN       56
 #define Y_MIN_PIN          14
-#define Y_MAX_PIN          15
+#define Y_MAX_PIN          -1 //PIN 15 is used
+
+#define Z_STEP_PIN         46
+#define Z_DIR_PIN          48
+#define Z_ENABLE_PIN       62
 #define Z_MIN_PIN          18
-#define Z_MAX_PIN          19
+#define Z_MAX_PIN          -1 //PIN 19 is used
+
+//extruder 1
+#define E0_STEP_PIN        26
+#define E0_DIR_PIN         28
+#define E0_ENABLE_PIN      24
+
+//extruder 2
+#define E1_STEP_PIN        36
+#define E1_DIR_PIN         34
+#define E1_ENABLE_PIN      30
 
 const long katlarArasiMesafe = 20000;
 const long aracDondurmeMesafesi = 500;
@@ -22,6 +43,8 @@ const long yurutmeMesafesi = 5000;
 AccelStepper stepperX(AccelStepper::DRIVER, X_STEP_PIN, X_DIR_PIN);
 AccelStepper stepperY(AccelStepper::DRIVER, Y_STEP_PIN, Y_DIR_PIN);
 AccelStepper stepperZ(AccelStepper::DRIVER, Z_STEP_PIN, Z_DIR_PIN);
+AccelStepper stepperE0(AccelStepper::DRIVER, E0_STEP_PIN, E0_DIR_PIN);
+AccelStepper stepperE1(AccelStepper::DRIVER, E1_STEP_PIN, E1_DIR_PIN);
 
 void setup() {
   Serial.begin(9600);
@@ -47,6 +70,20 @@ void setup() {
   stepperZ.setMaxSpeed(1000);
   stepperZ.setAcceleration(1000);
   stepperZ.setSpeed(1000);
+
+  stepperE0.setEnablePin(E0_ENABLE_PIN);
+  stepperE0.setPinsInverted(false,false,true);
+  stepperE0.setMinPulseWidth(100);
+  stepperE0.setMaxSpeed(1000);
+  stepperE0.setAcceleration(1000);
+  stepperE0.setSpeed(1000);
+
+  stepperE1.setEnablePin(E1_ENABLE_PIN);
+  stepperE1.setPinsInverted(false,false,true);
+  stepperE1.setMinPulseWidth(100);
+  stepperE1.setMaxSpeed(1000);
+  stepperE1.setAcceleration(1000);
+  stepperE1.setSpeed(1000);
 
   SPI.begin();
   mfrc522.PCD_Init();
